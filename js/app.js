@@ -538,23 +538,41 @@ function renderProducts() {
   }
 
   container.innerHTML = filtered.map(p => {
-    // Generate technical SVG wireframe based on category
     const accentColor = p.image_color || 'var(--color-primary)';
+    
+    // Visual: image or SVG blueprint
+    const visualHtml = p.image 
+      ? `<img src="${p.image}" alt="${p.title}" class="product-img" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+         <div class="product-visual" style="display:none;">
+            <svg class="blueprint-svg" viewBox="0 0 160 120" fill="none" stroke="${accentColor}" stroke-width="1.5">
+              <rect x="25" y="25" width="110" height="70" rx="8" stroke-dasharray="2 2" stroke-opacity="0.4"/>
+              <circle cx="80" cy="60" r="14" stroke="${accentColor}" stroke-width="1.8"/>
+              <line x1="25" y1="60" x2="135" y2="60" stroke="${accentColor}" stroke-opacity="0.3"/>
+            </svg>
+         </div>`
+      : `<div class="product-visual">
+          <svg class="blueprint-svg" viewBox="0 0 160 120" fill="none" stroke="${accentColor}" stroke-width="1.5">
+            <rect x="25" y="25" width="110" height="70" rx="8" stroke-dasharray="2 2" stroke-opacity="0.4"/>
+            <path d="M40 85 L80 35 L120 85 Z" fill="${accentColor}" fill-opacity="0.12" stroke="${accentColor}" stroke-width="2"/>
+            <circle cx="80" cy="60" r="14" stroke="${accentColor}" stroke-width="1.8"/>
+            <circle cx="80" cy="60" r="4" fill="${accentColor}"/>
+            <line x1="25" y1="60" x2="135" y2="60" stroke="${accentColor}" stroke-opacity="0.3" stroke-dasharray="4 2"/>
+            <line x1="80" y1="25" x2="80" y2="95" stroke="${accentColor}" stroke-opacity="0.3" stroke-dasharray="4 2"/>
+          </svg>
+        </div>`;
+
+    const cadBtnHtml = p.cad_file
+      ? `<a href="${p.cad_file}" download title="Скачать 3D-модель (STEP)" class="btn btn-secondary" style="padding: 7px 9px; font-size: 0.75rem; font-family: var(--font-mono); color: var(--color-primary); border-color: rgba(0, 174, 66, 0.4);">
+           ↓ STEP
+         </a>`
+      : '';
+
     return `
       <div class="product-card">
         <div class="product-thumb">
           <div class="product-badge">${p.badge || '3D'}</div>
           <div class="product-material-tag">${p.material}</div>
-          <div class="product-visual">
-            <svg class="blueprint-svg" viewBox="0 0 160 120" fill="none" stroke="${accentColor}" stroke-width="1.5">
-              <rect x="25" y="25" width="110" height="70" rx="8" stroke-dasharray="2 2" stroke-opacity="0.4"/>
-              <path d="M40 85 L80 35 L120 85 Z" fill="${accentColor}" fill-opacity="0.12" stroke="${accentColor}" stroke-width="2"/>
-              <circle cx="80" cy="60" r="14" stroke="${accentColor}" stroke-width="1.8"/>
-              <circle cx="80" cy="60" r="4" fill="${accentColor}"/>
-              <line x1="25" y1="60" x2="135" y2="60" stroke="${accentColor}" stroke-opacity="0.3" stroke-dasharray="4 2"/>
-              <line x1="80" y1="25" x2="80" y2="95" stroke="${accentColor}" stroke-opacity="0.3" stroke-dasharray="4 2"/>
-            </svg>
-          </div>
+          ${visualHtml}
         </div>
         <div class="product-content">
           <div class="product-category-sub">${p.category_name}</div>
@@ -571,7 +589,8 @@ function renderProducts() {
               ${p.old_price ? `<span class="price-old">${p.old_price} ₽</span>` : ''}
             </div>
             <div class="card-actions">
-              <button class="btn btn-secondary" style="padding: 8px 12px; font-size: 0.8rem;" onclick="ProductModal.open('${p.id}')">Детали</button>
+              ${cadBtnHtml}
+              <button class="btn btn-secondary" style="padding: 8px 10px; font-size: 0.8rem;" onclick="ProductModal.open('${p.id}')">Инфо</button>
               <button class="btn btn-primary" style="padding: 8px 12px; font-size: 0.8rem;" onclick="Cart.addItem(AppState.products.find(x => x.id === '${p.id}'))">+ В корзину</button>
             </div>
           </div>

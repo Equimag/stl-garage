@@ -576,7 +576,7 @@ body {
 }
 
 .product-thumb {
-  height: 190px;
+  height: 200px;
   background: linear-gradient(135deg, #181C24, #0D0F13);
   position: relative;
   display: flex;
@@ -584,6 +584,17 @@ body {
   justify-content: center;
   border-bottom: 1px solid var(--border-subtle);
   overflow: hidden;
+}
+
+.product-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.product-card:hover .product-img {
+  transform: scale(1.06);
 }
 
 .product-visual {

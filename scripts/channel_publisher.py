@@ -39,6 +39,58 @@ def send_api_request(method: str, payload: dict) -> dict:
         return {"ok": False, "error": str(e)}
 
 
+def send_photo(photo_path: str, caption: str, inline_buttons: list = None) -> dict:
+    """Отправка фотографии в канал @stl_garage с подписью и кнопками."""
+    url = f"https://api.telegram.org/bot{BOT_TOKEN}/sendPhoto"
+    
+    photo_file = Path(photo_path)
+    if not photo_file.exists():
+        print(f"[WARN] Файл фото не найден: {photo_path}, отправляем как текст.")
+        return publish_post(caption, inline_buttons=inline_buttons)
+
+    boundary = "----WebKitFormBoundary7MA4YWxkTrZu0gW"
+    body = bytearray()
+
+    def add_field(name, value):
+        body.extend(f"--{boundary}\r\n".encode("utf-8"))
+        body.extend(f'Content-Disposition: form-data; name="{name}"\r\n\r\n'.encode("utf-8"))
+        body.extend(f"{value}\r\n".encode("utf-8"))
+
+    add_field("chat_id", str(CHANNEL_ID))
+    add_field("caption", caption)
+    add_field("parse_mode", "HTML")
+
+    if inline_buttons:
+        add_field("reply_markup", json.dumps({"inline_keyboard": inline_buttons}))
+
+    # Add photo
+    body.extend(f"--{boundary}\r\n".encode("utf-8"))
+    body.extend(f'Content-Disposition: form-data; name="photo"; filename="{photo_file.name}"\r\n'.encode("utf-8"))
+    body.extend(b"Content-Type: image/jpeg\r\n\r\n")
+    with open(photo_file, "rb") as f:
+        body.extend(f.read())
+    body.extend(b"\r\n")
+
+    body.extend(f"--{boundary}--\r\n".encode("utf-8"))
+
+    req = urllib.request.Request(
+        url,
+        data=bytes(body),
+        headers={"Content-Type": f"multipart/form-data; boundary={boundary}"}
+    )
+
+    try:
+        with urllib.request.urlopen(req, timeout=25) as res:
+            resp = json.loads(res.read().decode("utf-8"))
+            if resp.get("ok"):
+                msg_id = resp["result"]["message_id"]
+                print(f"[SUCCESS] Фото и карточка опубликованы в @{CHANNEL_USERNAME}: id={msg_id}")
+            return resp
+    except Exception as e:
+        print(f"[ERROR] sendPhoto failed: {e}", file=sys.stderr)
+        return publish_post(caption, inline_buttons=inline_buttons)
+
+
 def publish_post(text: str, inline_buttons: list = None, disable_web_page_preview: bool = False) -> dict:
     """Публикация текстового сообщения в канал @stl_garage с кнопками."""
     payload = {
@@ -62,7 +114,7 @@ def publish_post(text: str, inline_buttons: list = None, disable_web_page_previe
     return res
 
 
-def publish_product_card(product: dict, webapp_url: str = None) -> dict:
+def publish_product_card(product: dict, photo_path: str = None, webapp_url: str = None) -> dict:
     """Форматированная публикация карточки товара из каталога."""
     title = product.get("title", "Новое изделие")
     price = product.get("price", 0)
@@ -72,27 +124,30 @@ def publish_product_card(product: dict, webapp_url: str = None) -> dict:
     desc = product.get("description", "")
     dims = product.get("dimensions", "")
 
-    text = f"⚡ <b>НОВИНКА В МАСТЕРСКОЙ // STL GARAGE</b>\n\n"
+    text = f"⚡ <b>НОВИНКА // STL GARAGE</b>\n\n"
     text += f"📦 <b>{title}</b>\n\n"
     text += f"{desc}\n\n"
-    text += f"🔧 <b>Инженерные параметры:</b>\n"
-    text += f"• Пластик: <code>{material}</code>\n"
+    text += f"🔧 <b>Инженерные параметры детали:</b>\n"
+    text += f"• Материал: <code>{material}</code>\n"
     text += f"• Высота слоя: <code>{layer}</code>\n"
     text += f"• Заполнение: <code>{infill}</code>\n"
     if dims:
         text += f"• Габариты: <code>{dims}</code>\n"
     text += f"\n💰 <b>Стоимость:</b> <b>{price} ₽</b>\n"
+    text += f"📁 <i>CAD-модель (STEP) доступна на сайте для скачивания</i>\n"
     text += f"📍 Доставка по РФ (СДЭК, Почта России)\n\n"
-    text += f"#3dпечать #{material.split()[0].lower()} #stl_garage #товары"
+    text += f"#3dпечать #bambulab #{material.split()[0].lower()} #stl_garage #step"
 
-    # Standard order buttons
     target_url = webapp_url or SITE_URL
     buttons = [
         [
-            {"text": "🛒 Заказать на сайте", "url": target_url},
-            {"text": "💬 Написать мастеру", "url": f"https://t.me/{BOT_USERNAME}"}
+            {"text": "🛒 Открыть в каталоге", "url": target_url},
+            {"text": "💬 Заказать у мастера", "url": f"https://t.me/{BOT_USERNAME}"}
         ]
     ]
+
+    if photo_path and Path(photo_path).exists():
+        return send_photo(photo_path, text, inline_buttons=buttons)
 
     return publish_post(text, inline_buttons=buttons)
 
