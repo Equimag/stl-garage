@@ -8,5 +8,5 @@ CHANNEL_USERNAME = "stl_garage"
 CHANNEL_URL = "https://t.me/stl_garage"
 BOOSTY_URL = "https://boosty.to/stl_garage/donate"
 
-# Base site URL (Default GitHub Pages structure, or custom domain if configured)
-SITE_URL = "https://memfor.github.io/Site/"
+# Base site URL on GitHub Pages
+SITE_URL = "https://revermag.github.io/stl-garage/"
