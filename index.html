@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>STL GARAGE — Лаборатория 3D-печати и кастомных деталей</title>
+  <meta name="description" content="Инженерная и серийная 3D-печать в мастерской STL Garage: корпуса РЭА, автомобильные детали, органайзеры, TPU демпферы. Доставка по РФ.">
+  
+  <!-- Telegram WebApp SDK -->
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+
+  <!-- High-Tech Design System -->
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%2300AE42'/><path d='M16 6 L26 12 L26 22 L16 28 L6 22 L6 12 Z' fill='none' stroke='%23000' stroke-width='2.5'/><circle cx='16' cy='17' r='3.5' fill='%23000'/></svg>">
+</head>
+<body>
+
+  <!-- Sticky Glass Navigation -->
+  <header class="header">
+    <div class="container nav-wrap">
+      <a href="#" class="brand">
+        <div class="brand-logo">
+          <svg viewBox="0 0 24 24">
+            <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+          </svg>
+        </div>
+        <div class="brand-text">
+          <div class="brand-title">
+            <span>STL GARAGE</span>
+          </div>
+          <span class="brand-tag">3D PRINT LAB // RU</span>
+        </div>
+      </a>
+
+      <!-- Status indicator -->
+      <div class="live-badge d-none-mobile">
+        <span class="live-dot"></span>
+        <span>ПРИЕМ ЗАКАЗОВ В РАБОТЕ</span>
+      </div>
+
+      <!-- Nav Actions -->
+      <div class="nav-actions">
+        <!-- Accent Theme Picker -->
+        <div class="theme-switch" title="Выбрать акцентный цвет">
+          <span class="theme-dot dot-green" data-theme="green" title="Bambu Green"></span>
+          <span class="theme-dot dot-orange" data-theme="orange" title="Cyber Orange"></span>
+          <span class="theme-dot dot-cyan" data-theme="cyan" title="Tech Cyan"></span>
+        </div>
+
+        <!-- Telegram Channel Link -->
+        <a href="https://t.me/stl_garage" target="_blank" rel="noopener" class="btn btn-tg">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69a.2.2 0 00-.05-.18c-.06-.05-.14-.03-.21-.02-.09.02-1.49.95-4.22 2.79-.4.27-.76.41-1.08.4-.36-.01-1.04-.2-1.55-.37-.63-.2-1.12-.31-1.08-.66.02-.18.27-.36.75-.55 2.92-1.27 4.86-2.11 5.83-2.51 2.78-1.16 3.35-1.36 3.73-1.36.08 0 .27.02.39.12.1.08.13.19.14.27-.01.06.01.24 0 .38z"/>
+          </svg>
+          <span class="d-none-mobile">@stl_garage</span>
+        </a>
+
+        <!-- Cart Button -->
+        <button id="btn-open-cart" class="btn btn-cart">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <path d="M16 10a4 4 0 0 1-8 0"></path>
+          </svg>
+          <span id="cart-badge" class="cart-count" style="display:none;">0</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="container hero-grid">
+      <div class="hero-info">
+        <div class="hero-subtitle">
+          <span style="display:inline-block; width:8px; height:8px; background:var(--color-primary); border-radius:50%;"></span>
+          Лаборатория аддитивного производства
+        </div>
+        <h1 class="hero-title">
+          Прецизионная <span class="text-gradient">3D-печать</span> и разработка деталей
+        </h1>
+        <p class="hero-description">
+          Серийные и штучные изделия под ключ: ударопрочные корпуса РЭА, автомобильные пистоны и переходники, органайзеры и гибкие демпферы. Изготовление от 2 часов на оборудовании Bambu Lab.
+        </p>
+
+        <div class="hero-cta-group">
+          <a href="#catalog" class="btn btn-primary">
+            <span>Смотреть каталог деталей</span>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <path d="M5 12h14M12 5l7 7-7 7"/>
+            </svg>
+          </a>
+          <a href="#calculator" class="btn btn-secondary">
+            <span>Рассчитать свою модель</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- Equipment Status Card -->
+      <div class="hardware-card">
+        <div class="hardware-header">
+          <div class="hardware-title">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--color-primary)" stroke-width="2">
+              <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+              <line x1="8" y1="21" x2="16" y2="21"></line>
+              <line x1="12" y1="17" x2="12" y2="21"></line>
+            </svg>
+            <span>СТАТУС ОБОРУДОВАНИЯ</span>
+          </div>
+          <span class="live-badge" style="padding:2px 8px; font-size:0.68rem;">ONLINE</span>
+        </div>
+
+        <div class="specs-grid">
+          <div class="spec-item">
+            <div class="spec-label">Парк станков</div>
+            <div class="spec-val">Bambu Lab CoreXY</div>
+          </div>
+          <div class="spec-item">
+            <div class="spec-label">Точность слоя</div>
+            <div class="spec-val font-mono">0.08 – 0.28 мм</div>
+          </div>
+          <div class="spec-item">
+            <div class="spec-label">Пластик</div>
+            <div class="spec-val">PETG, ABS, TPU, PLA</div>
+          </div>
+          <div class="spec-item">
+            <div class="spec-label">Стол печати</div>
+            <div class="spec-val">Textured PEI Plate</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Benefits Ticker Bar -->
+  <div class="ticker-bar">
+    <div class="container ticker-grid">
+      <div class="ticker-item">
+        <div class="ticker-icon">⚡</div>
+        <div class="ticker-text">
+          <strong>Высокая скорость</strong>
+          <span>Печать деталей в день обращения</span>
+        </div>
+      </div>
+      <div class="ticker-item">
+        <div class="ticker-icon">🛡</div>
+        <div class="ticker-text">
+          <strong>Инженерный пластик</strong>
+          <span>Термостойкость до 105°C и прочность</span>
+        </div>
+      </div>
+      <div class="ticker-item">
+        <div class="ticker-icon">📦</div>
+        <div class="ticker-text">
+          <strong>Доставка по всей РФ</strong>
+          <span>СДЭК, Почта России, Яндекс</span>
+        </div>
+      </div>
+      <div class="ticker-item">
+        <div class="ticker-icon">💬</div>
+        <div class="ticker-text">
+          <strong>Прямой контакт</strong>
+          <span>Связь с мастером в Telegram</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Catalog Section -->
+  <section id="catalog" class="container" style="padding: 20px 0 60px;">
+    <div class="section-head">
+      <div class="section-tag">// КАТАЛОГ ИЗДЕЛИЙ</div>
+      <h2 class="section-title">Готовые детали и серийные партии</h2>
+    </div>
+
+    <!-- Filter Tabs & Live Search -->
+    <div class="filters-wrap">
+      <div class="tabs-group">
+        <button class="tab-btn active" data-category="all">Все изделия</button>
+        <button class="tab-btn" data-category="enclosures">РЭА и Корпуса</button>
+        <button class="tab-btn" data-category="auto">Авто & Мастерская</button>
+        <button class="tab-btn" data-category="organizers">Органайзеры</button>
+        <button class="tab-btn" data-category="gadgets">Гаджеты</button>
+        <button class="tab-btn" data-category="custom">Кастом</button>
+      </div>
+
+      <div class="search-box">
+        <svg class="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="11" cy="11" r="8"></circle>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+        </svg>
+        <input type="text" id="search-input" class="search-input" placeholder="Поиск по названию или пластику...">
+      </div>
+    </div>
+
+    <!-- Dynamic Products Grid -->
+    <div id="products-container" class="products-grid">
+      <!-- Injected by js/app.js -->
+    </div>
+  </section>
+
+  <!-- 3D Print Calculator Section -->
+  <section id="calculator" class="container">
+    <div class="calculator-section">
+      <div class="section-head" style="margin-bottom: 24px;">
+        <div class="section-tag">// ИНТЕРАКТИВНЫЙ РАСЧЕТ</div>
+        <h2 class="section-title">Калькулятор индивидуальной печати</h2>
+        <p style="color:var(--text-secondary); max-width:640px; font-size:0.95rem;">
+          Примерный расчет стоимости изготовления вашей 3D-модели (STL / STEP) по массе и параметрам заполнителя.
+        </p>
+      </div>
+
+      <div class="calc-grid">
+        <div class="calc-inputs">
+          <div class="form-group">
+            <label class="form-label" for="calc-material">
+              <span>Тип пластика:</span>
+            </label>
+            <select id="calc-material" class="form-select">
+              <option value="petg">PETG — прочный, стойкий к химии и УФ (4.0 ₽/г)</option>
+              <option value="pla">PLA — эстетичный, матовый, жесткий (4.5 ₽/г)</option>
+              <option value="abs">ABS / ASA — авто-пластик, термостойкий 100°C+ (5.5 ₽/г)</option>
+              <option value="tpu">TPU 95A — гибкий, резиноподобный эластомер (7.5 ₽/г)</option>
+              <option value="carbon">Carbon CF — сверхжесткий композит с углем (9.5 ₽/г)</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <div class="form-label">
+              <span>Ориентировочный вес детали:</span>
+              <span id="calc-weight-val" class="font-mono">50 г</span>
+            </div>
+            <input type="range" id="calc-weight" class="range-slider" min="5" max="400" step="5" value="50">
+          </div>
+
+          <div class="form-group">
+            <div class="form-label">
+              <span>Плотность заполнения (Infill):</span>
+              <span id="calc-infill-val" class="font-mono">25%</span>
+            </div>
+            <input type="range" id="calc-infill" class="range-slider" min="15" max="100" step="5" value="25">
+          </div>
+
+          <div style="display:grid; grid-template-columns: 1fr 1fr; gap:16px;">
+            <div class="form-group">
+              <label class="form-label" for="calc-layer">Высота слоя:</label>
+              <select id="calc-layer" class="form-select">
+                <option value="0.12">0.12 мм (Ювелирная)</option>
+                <option value="0.16" selected>0.16 мм (Стандартная)</option>
+                <option value="0.20">0.20 мм (Техническая)</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="calc-qty">Количество штук:</label>
+              <input type="number" id="calc-qty" class="form-input" min="1" max="100" value="1">
+            </div>
+          </div>
+        </div>
+
+        <!-- Result Box -->
+        <div class="calc-result-box">
+          <div class="calc-estimate-label">ОРИЕНТИРОВОЧНАЯ СТОИМОСТЬ</div>
+          <div id="calc-total-price" class="calc-estimate-price">390 ₽</div>
+
+          <div class="calc-breakdown">
+            <div class="breakdown-row">
+              <span>Итоговый вес партии:</span>
+              <strong id="calc-res-weight" class="font-mono">50 г</strong>
+            </div>
+            <div class="breakdown-row">
+              <span>Расчетное время печати:</span>
+              <strong id="calc-res-time" class="font-mono">~1.8 ч</strong>
+            </div>
+            <div class="breakdown-row">
+              <span>Оборудование:</span>
+              <span>Bambu Lab High-Speed</span>
+            </div>
+          </div>
+
+          <button id="btn-order-custom" class="btn btn-primary" style="width:100%; padding:14px;">
+            <span>Заказать печать по этой конфигурации</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Telegram Banner -->
+  <section class="container">
+    <div class="telegram-banner">
+      <div class="tg-info">
+        <h3>
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="#229ED9">
+            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69a.2.2 0 00-.05-.18c-.06-.05-.14-.03-.21-.02-.09.02-1.49.95-4.22 2.79-.4.27-.76.41-1.08.4-.36-.01-1.04-.2-1.55-.37-.63-.2-1.12-.31-1.08-.66.02-.18.27-.36.75-.55 2.92-1.27 4.86-2.11 5.83-2.51 2.78-1.16 3.35-1.36 3.73-1.36.08 0 .27.02.39.12.1.08.13.19.14.27-.01.06.01.24 0 .38z"/>
+          </svg>
+          Канал сообщества @stl_garage
+        </h3>
+        <p>
+          Свежие 3D-модели, процесс печати сложных изделий, готовые STL-наборы и обзоры пластика. Подписывайтесь, чтобы следить за новинками мастерской!
+        </p>
+      </div>
+      <div style="display:flex; flex-direction:column; gap:10px; min-width:240px;">
+        <a href="https://t.me/stl_garage" target="_blank" rel="noopener" class="btn btn-tg" style="padding:14px 24px; font-size:1rem;">
+          <span>Подписаться на канал</span>
+        </a>
+        <a href="https://boosty.to/stl_garage/donate" target="_blank" rel="noopener" class="btn btn-secondary" style="font-size:0.85rem; padding:10px;">
+          <span>Поддержать на Boosty</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div>
+          <div style="font-weight:800; font-size:1.1rem; margin-bottom:8px;">STL GARAGE LAB</div>
+          <p style="max-width:380px; font-size:0.85rem; line-height:1.6;">
+            Лаборатория 3D-печати и проектирования. Изготовление корпусов приборов, крепежа, органайзеров и кастомных компонентов.
+          </p>
+        </div>
+        <div>
+          <div style="font-weight:700; margin-bottom:12px;">Навигация</div>
+          <ul style="list-style:none; line-height:2; font-size:0.85rem;">
+            <li><a href="#catalog" style="color:var(--text-secondary); text-decoration:none;">Каталог готовых изделий</a></li>
+            <li><a href="#calculator" style="color:var(--text-secondary); text-decoration:none;">Калькулятор 3D-печати</a></li>
+            <li><a href="https://t.me/stl_garage" target="_blank" style="color:var(--text-secondary); text-decoration:none;">Telegram-канал</a></li>
+          </ul>
+        </div>
+        <div>
+          <div style="font-weight:700; margin-bottom:12px;">Контакты</div>
+          <p style="font-size:0.85rem; line-height:1.8;">
+            Telegram: <a href="https://t.me/STLGarage_bot" target="_blank" style="color:var(--color-primary); text-decoration:none;">@STLGarage_bot</a><br>
+            Канал: <a href="https://t.me/stl_garage" target="_blank" style="color:var(--color-primary); text-decoration:none;">@stl_garage</a><br>
+            Доставка: СДЭК, Почта РФ
+          </p>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <span>© 2026 STL Garage. Все права защищены.</span>
+        <span>Платформа работает автономно на GitHub Pages & Telegram Mini App</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Modal: Product Detail -->
+  <div id="product-detail-modal" class="modal-backdrop">
+    <div class="modal-content">
+      <button id="btn-close-product-modal" class="modal-close-btn">&times;</button>
+      <div class="product-category-sub" id="modal-product-cat">Категория</div>
+      <h2 class="product-title" id="modal-product-title" style="font-size:1.5rem; margin-bottom:14px;">Название товара</h2>
+      <p id="modal-product-desc" style="color:var(--text-secondary); margin-bottom:20px; font-size:0.92rem;"></p>
+
+      <div style="background:var(--bg-card-elevated); border:1px solid var(--border-subtle); border-radius:var(--radius-sm); padding:16px; margin-bottom:20px;">
+        <div style="font-size:0.75rem; font-family:var(--font-mono); color:var(--text-tertiary); text-transform:uppercase; margin-bottom:10px;">Инженерные параметры детали:</div>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; font-size:0.85rem;">
+          <div>Пластик: <strong id="modal-spec-mat" class="font-mono" style="color:var(--color-primary);"></strong></div>
+          <div>Высота слоя: <strong id="modal-spec-layer" class="font-mono"></strong></div>
+          <div>Заполнение: <strong id="modal-spec-infill" class="font-mono"></strong></div>
+          <div>Габариты: <strong id="modal-spec-dim" class="font-mono"></strong></div>
+          <div>Масса: <strong id="modal-spec-weight" class="font-mono"></strong></div>
+          <div>Время печати: <strong id="modal-spec-time" class="font-mono"></strong></div>
+        </div>
+      </div>
+
+      <div style="margin-bottom:24px;">
+        <div style="font-size:0.85rem; font-weight:700; margin-bottom:8px;">Особенности и преимущества:</div>
+        <ul id="modal-features-list" style="list-style:none; padding:0;"></ul>
+      </div>
+
+      <div style="display:flex; justify-content:space-between; align-items:center; border-top:1px solid var(--border-subtle); padding-top:16px;">
+        <div>
+          <span style="font-size:0.75rem; color:var(--text-tertiary); display:block;">Стоимость:</span>
+          <span id="modal-product-price" style="font-size:1.6rem; font-weight:800; color:var(--color-primary);"></span>
+        </div>
+        <button id="modal-btn-add-cart" class="btn btn-primary" style="padding:12px 24px;">
+          <span>Добавить в корзину</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Cart -->
+  <div id="cart-modal" class="modal-backdrop">
+    <div class="modal-content">
+      <button id="btn-close-cart" class="modal-close-btn">&times;</button>
+      <h3 style="font-size:1.4rem; font-weight:800; margin-bottom:14px; display:flex; align-items:center; gap:8px;">
+        <span>Ваша корзина</span>
+      </h3>
+      
+      <div id="cart-empty-notice" style="text-align:center; padding:32px 10px; color:var(--text-tertiary);">
+        <p style="font-size:1.1rem; margin-bottom:6px;">Корзина пока пуста</p>
+        <span style="font-size:0.85rem;">Выберите изделия из каталога или рассчитайте деталь на калькуляторе</span>
+      </div>
+
+      <div id="cart-items-container" class="cart-items-list"></div>
+
+      <div style="display:flex; justify-content:space-between; align-items:center; padding:16px 0; border-top:1px solid var(--border-subtle);">
+        <span style="font-size:0.95rem; color:var(--text-secondary);">Итого к оплате:</span>
+        <strong id="cart-total-price" style="font-size:1.6rem; font-weight:900; color:var(--color-primary);">0 ₽</strong>
+      </div>
+
+      <button id="btn-checkout" class="btn btn-primary" style="width:100%; padding:14px; font-size:1rem;" disabled>
+        <span>Перейти к оформлению заказа</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Modal: Checkout Order -->
+  <div id="order-modal" class="modal-backdrop">
+    <div class="modal-content">
+      <button id="btn-close-order" class="modal-close-btn">&times;</button>
+      <h3 style="font-size:1.4rem; font-weight:800; margin-bottom:6px;">Оформление заказа</h3>
+      <p style="color:var(--text-secondary); font-size:0.85rem; margin-bottom:18px;">
+        Заказ будет моментально передан мастеру через Telegram. Никаких лишних регистраций.
+      </p>
+
+      <form id="order-form">
+        <div class="form-group">
+          <label class="form-label" for="order-name">Ваше имя:</label>
+          <input type="text" id="order-name" class="form-input" required placeholder="Например: Алексей">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="order-contact">Контакт для связи (Telegram / Телефон):</label>
+          <input type="text" id="order-contact" class="form-input" required placeholder="@username или +7 (999) 000-00-00">
+        </div>
+
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:14px;">
+          <div class="form-group">
+            <label class="form-label" for="order-delivery">Способ доставки:</label>
+            <select id="order-delivery" class="form-select">
+              <option value="СДЭК">СДЭК (ПВЗ или курьер)</option>
+              <option value="Почта России">Почта России</option>
+              <option value="Яндекс Доставка">Яндекс Доставка</option>
+              <option value="Самовывоз">Самовывоз (по согласованию)</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="order-city">Город / Адрес ПВЗ:</label>
+            <input type="text" id="order-city" class="form-input" placeholder="Москва, ПВЗ Ленина 12">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="order-comment">Комментарий или пожелания по цвету:</label>
+          <textarea id="order-comment" class="form-textarea" rows="2" placeholder="Цвет пластика, особенности эксплуатации, доп. требования..."></textarea>
+        </div>
+
+        <button type="submit" id="btn-submit-order" class="btn btn-primary" style="width:100%; padding:14px; font-size:1rem;">
+          <span>Подтвердить заказ в Telegram</span>
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Toast Notification Mount -->
+  <div id="toast-container" class="toast-container"></div>
+
+  <!-- Application Logic -->
+  <script src="js/tg-order.js"></script>
+  <script src="js/calculator.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
