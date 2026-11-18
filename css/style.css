@@ -53,6 +53,8 @@ body.theme-cyan {
 html {
   scroll-behavior: smooth;
   font-size: 16px;
+  overflow-x: hidden;
+  max-width: 100%;
 }
 
 body {
@@ -63,6 +65,7 @@ body {
   min-height: 100vh;
   position: relative;
   overflow-x: hidden;
+  max-width: 100%;
   background-image: 
     radial-gradient(circle at 50% 0%, rgba(0, 174, 66, 0.08) 0%, transparent 50%),
     radial-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px);
@@ -75,6 +78,7 @@ body {
   max-width: 1220px;
   margin: 0 auto;
   padding: 0 20px;
+  box-sizing: border-box;
 }
 
 /* Typography Helpers */
@@ -737,6 +741,8 @@ body {
   margin-bottom: 70px;
   position: relative;
   overflow: hidden;
+  box-sizing: border-box;
+  max-width: 100%;
 }
 
 .calc-grid {
@@ -746,6 +752,25 @@ body {
   align-items: start;
 }
 
+.calc-inputs,
+.calc-result-box {
+  min-width: 0;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+.calc-row-2col,
+.form-row-2col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.calc-row-2col > *,
+.form-row-2col > * {
+  min-width: 0;
+}
+
 .form-group {
   margin-bottom: 20px;
 }
@@ -753,6 +778,9 @@ body {
 .form-label {
   display: flex;
   justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px;
   font-size: 0.85rem;
   font-weight: 600;
   margin-bottom: 8px;
@@ -766,6 +794,9 @@ body {
 
 .form-select, .form-input, .form-textarea {
   width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
   background: var(--bg-page);
   border: 1px solid var(--border-highlight);
   border-radius: var(--radius-sm);
@@ -776,6 +807,12 @@ body {
   transition: var(--transition);
 }
 
+.form-select {
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
 .form-select:focus, .form-input:focus, .form-textarea:focus {
   border-color: var(--color-primary);
   box-shadow: 0 0 12px var(--color-primary-glow);
@@ -783,6 +820,8 @@ body {
 
 .range-slider {
   width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
   accent-color: var(--color-primary);
   cursor: pointer;
 }
@@ -793,6 +832,15 @@ body {
   border-radius: var(--radius-md);
   padding: 24px;
   text-align: center;
+}
+
+.btn-calc-submit {
+  white-space: normal !important;
+  text-align: center;
+  line-height: 1.35;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .calc-estimate-label {
@@ -859,10 +907,9 @@ body {
 /* Modal Windows (Product detail & Cart) */
 .modal-backdrop {
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
+  inset: 0;
+  width: 100%;
+  height: 100%;
   background: rgba(0, 0, 0, 0.8);
   backdrop-filter: blur(8px);
   z-index: 999;
@@ -872,6 +919,7 @@ body {
   padding: 16px;
   opacity: 0;
   transition: opacity 0.25s ease;
+  box-sizing: border-box;
 }
 
 .modal-backdrop.open {
@@ -892,6 +940,7 @@ body {
   box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.8);
   transform: scale(0.95);
   transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  box-sizing: border-box;
 }
 
 .modal-backdrop.open .modal-content {
@@ -1028,28 +1077,159 @@ body {
 @media (max-width: 900px) {
   .hero-grid {
     grid-template-columns: 1fr;
+    gap: 32px;
   }
   .calc-grid {
     grid-template-columns: 1fr;
+    gap: 28px;
   }
   .telegram-banner {
     flex-direction: column;
     text-align: center;
+    padding: 32px 24px;
+    gap: 20px;
+  }
+  .tg-info h3 {
+    justify-content: center;
+  }
+  .tg-info p {
+    margin: 0 auto;
+  }
+  .tg-actions {
+    width: 100%;
+    min-width: 0 !important;
   }
   .footer-grid {
     grid-template-columns: 1fr;
+    gap: 24px;
+  }
+}
+
+@media (max-width: 768px) {
+  .calculator-section {
+    padding: 28px 20px;
+    margin-bottom: 50px;
+    border-radius: var(--radius-md);
+  }
+  .calc-result-box {
+    padding: 20px 16px;
+  }
+  .hero {
+    padding: 40px 0 28px;
+  }
+  .modal-content {
+    padding: 24px 18px;
+    width: 96%;
+    margin: 0 auto;
+    border-radius: var(--radius-md);
   }
 }
 
 @media (max-width: 600px) {
+  .container {
+    padding: 0 14px;
+  }
   .nav-wrap {
     flex-wrap: wrap;
+    gap: 12px;
+  }
+  .brand-title span {
+    font-size: 1.15rem;
+  }
+  .brand-tag {
+    font-size: 0.65rem;
+  }
+  .hero-title {
+    font-size: 1.95rem;
+    line-height: 1.2;
+  }
+  .hero-description {
+    font-size: 0.95rem;
+    margin-bottom: 24px;
+  }
+  .hero-cta-group {
+    flex-direction: column;
+    gap: 10px;
+  }
+  .hero-cta-group .btn {
+    width: 100%;
+    justify-content: center;
+    white-space: normal;
   }
   .filters-wrap {
     flex-direction: column;
     align-items: stretch;
+    gap: 12px;
   }
   .search-box {
     width: 100%;
+    min-width: 0;
+  }
+  .calc-row-2col,
+  .form-row-2col {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+  .calc-estimate-price {
+    font-size: 2.2rem;
+  }
+  .calculator-section {
+    padding: 22px 14px;
+  }
+  .products-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+  .product-footer {
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  .product-price-box {
+    width: 100%;
+    flex-direction: row;
+    align-items: baseline;
+    gap: 8px;
+  }
+  .card-actions {
+    width: 100%;
+    justify-content: space-between;
+  }
+  .card-actions .btn {
+    flex: 1;
+    justify-content: center;
+  }
+  .footer-bottom {
+    flex-direction: column;
+    gap: 10px;
+    text-align: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .container {
+    padding: 0 12px;
+  }
+  .calculator-section {
+    padding: 18px 12px;
+    margin-bottom: 36px;
+  }
+  .calc-result-box {
+    padding: 16px 10px;
+  }
+  .calc-estimate-price {
+    font-size: 2rem;
+  }
+  .telegram-banner {
+    padding: 20px 14px;
+  }
+  .telegram-banner h3 {
+    font-size: 1.3rem;
+  }
+  .modal-content {
+    padding: 20px 14px;
+  }
+  .btn-calc-submit {
+    font-size: 0.88rem !important;
+    padding: 12px 10px !important;
   }
 }
