@@ -220,7 +220,7 @@ def generate_post_content(article: dict) -> str:
                 "contents": [{"parts": [{"text": prompt}]}],
                 "generationConfig": {
                     "temperature": 0.65,
-                    "maxOutputTokens": 1000
+                    "maxOutputTokens": 2000
                 }
             }
             try:
@@ -234,11 +234,23 @@ def generate_post_content(article: dict) -> str:
                     candidates = data.get("candidates", [])
                     if candidates and "content" in candidates[0]:
                         parts = candidates[0]["content"].get("parts", [])
-                        if parts and "text" in parts[0]:
-                            text = parts[0]["text"].strip()
-                            text = re.sub(r"^```(?:html)?\s*", "", text, flags=re.I)
-                            text = re.sub(r"\s*```$", "", text)
-                            return text
+                        full_text = "".join(p.get("text", "") for p in parts if "text" in p).strip()
+                        full_text = re.sub(r"^```(?:html)?\s*", "", full_text, flags=re.I)
+                        full_text = re.sub(r"\s*```$", "", full_text)
+
+                        # Закрытие незакрытых тегов HTML
+                        for tag in ['b', 'i', 'code']:
+                            o = len(re.findall(rf'<{tag}>', full_text, re.I))
+                            c = len(re.findall(rf'</{tag}>', full_text, re.I))
+                            if o > c:
+                                full_text += f"</{tag}>" * (o - c)
+                        if '<a ' in full_text and '</a>' not in full_text:
+                            full_text += '</a>'
+
+                        if len(full_text) >= 250:
+                            return full_text
+                        else:
+                            print(f"[WARN] Слишком короткий текст ({len(full_text)} симв.), пробуем еще...")
             except urllib.error.HTTPError as e:
                 # 503 или 429 - временная нагрузка, пробуем следующую модель
                 time.sleep(1.5)

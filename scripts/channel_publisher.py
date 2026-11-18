@@ -86,6 +86,14 @@ def send_photo(photo_path: str, caption: str, inline_buttons: list = None) -> di
                 msg_id = resp["result"]["message_id"]
                 print(f"[SUCCESS] Фото и карточка опубликованы в @{CHANNEL_USERNAME}: id={msg_id}")
             return resp
+    except urllib.error.HTTPError as e:
+        err_body = e.read().decode("utf-8", errors="ignore")
+        print(f"[ERROR] sendPhoto HTTP {e.code}: {err_body}", file=sys.stderr)
+        if "can't parse entities" in err_body:
+            print("[WARN] Ошибка HTML сущностей в sendPhoto, отправляем с очищенным текстом...")
+            clean_cap = re.sub(r'<[^>]+>', '', caption)
+            return publish_post(clean_cap, inline_buttons=inline_buttons)
+        return publish_post(caption, inline_buttons=inline_buttons)
     except Exception as e:
         print(f"[ERROR] sendPhoto failed: {e}", file=sys.stderr)
         return publish_post(caption, inline_buttons=inline_buttons)
@@ -110,6 +118,16 @@ def publish_post(text: str, inline_buttons: list = None, disable_web_page_previe
         msg_id = res["result"]["message_id"]
         print(f"[SUCCESS] Пост опубликован в @{CHANNEL_USERNAME}: id={msg_id}")
     else:
+        # Fallback: retry without HTML parse_mode if entity error
+        if "can't parse entities" in str(res.get("error", "")):
+            print("[WARN] Ошибка парсинга HTML, отправляем чистым текстом без тегов...")
+            clean_text = re.sub(r'<[^>]+>', '', text)
+            payload["text"] = clean_text
+            payload.pop("parse_mode", None)
+            res = send_api_request("sendMessage", payload)
+            if res.get("ok"):
+                print(f"[SUCCESS] Пост опубликован в @{CHANNEL_USERNAME} (plain text): id={res['result']['message_id']}")
+                return res
         print(f"[FAILED] Ошибка публикации: {res}")
     return res
 
@@ -134,9 +152,10 @@ def publish_product_card(product: dict, photo_path: str = None, webapp_url: str 
     if dims:
         text += f"• Габариты: <code>{dims}</code>\n"
     text += f"\n💰 <b>Стоимость:</b> <b>{price} ₽</b>\n"
-    text += f"📁 <i>CAD-модель (STEP) доступна на сайте для скачивания</i>\n"
+    text += f"🚀 <i>Быстрая печать на Bambu Lab и отправка в день готовности</i>\n"
     text += f"📍 Доставка по РФ (СДЭК, Почта России)\n\n"
-    text += f"#3dпечать #bambulab #{material.split()[0].lower()} #stl_garage #step"
+    mat_tag = material.split('/')[0].split()[0].lower()
+    text += f"#3dпечать #bambulab #{mat_tag} #stl_garage #производство"
 
     target_url = webapp_url or SITE_URL
     buttons = [
