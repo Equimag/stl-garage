@@ -561,11 +561,6 @@ function renderProducts() {
           </svg>
         </div>`;
 
-    const cadBtnHtml = p.cad_file
-      ? `<a href="${p.cad_file}" download title="Скачать 3D-модель (STEP)" class="btn btn-secondary" style="padding: 7px 9px; font-size: 0.75rem; font-family: var(--font-mono); color: var(--color-primary); border-color: rgba(0, 174, 66, 0.4);">
-           ↓ STEP
-         </a>`
-      : '';
 
     return `
       <div class="product-card">
@@ -589,9 +584,8 @@ function renderProducts() {
               ${p.old_price ? `<span class="price-old">${p.old_price} ₽</span>` : ''}
             </div>
             <div class="card-actions">
-              ${cadBtnHtml}
-              <button class="btn btn-secondary" style="padding: 8px 10px; font-size: 0.8rem;" onclick="ProductModal.open('${p.id}')">Инфо</button>
-              <button class="btn btn-primary" style="padding: 8px 12px; font-size: 0.8rem;" onclick="Cart.addItem(AppState.products.find(x => x.id === '${p.id}'))">+ В корзину</button>
+              <button class="btn btn-secondary" style="padding: 8px 12px; font-size: 0.8rem;" onclick="ProductModal.open('${p.id}')">Детали</button>
+              <button class="btn btn-primary" style="padding: 8px 14px; font-size: 0.8rem;" onclick="Cart.addItem(AppState.products.find(x => x.id === '${p.id}'))">+ В корзину</button>
             </div>
           </div>
         </div>

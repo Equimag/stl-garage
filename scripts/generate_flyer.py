@@ -1,12 +1,6 @@
 """
-Генератор готовой к печати рекламной брошюры/объявления для расклейки в подъездах (2 на А4).
-Файл: flyer.html
-Максимальная адаптация под Ч/Б лазерную и струйную печать:
-- Высокий контраст (#000000 и #ffffff)
-- Векторные четкие SVG иконки и SVG QR-коды
-- Идеальное заполнение листа А4 без вылетов
-- Возможность интерактивного ввода телефона и Telegram с мгновенным обновлением обоих флаеров
-- 2 режима: с отрывными талонами и сплошной постер с ценами
+Обновленный генератор рекламной брошюры 3D-печати (2 на А4) с акцентом на «3D-ПЕЧАТЬ».
+Слово 3D-ПЕЧАТЬ сделано максимально крупным, жирным и доминирующим.
 """
 import os
 import subprocess
@@ -28,47 +22,47 @@ def get_qr_svg(url, box_size=8):
 def generate_flyer():
     qr_tg_main = get_qr_svg('https://t.me/stl_garage', box_size=7)
     qr_tg_mini = get_qr_svg('https://t.me/stl_garage', box_size=3)
+    qr_site_box = get_qr_svg('https://revermag.github.io/stl-garage/', box_size=5)
 
-    # Векторные crisp иконки для идеальной Ч/Б печати (без смазывания эмодзи)
     icon_gear = '''<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>'''
-    
     icon_car = '''<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 16H9m10 0h3v-3.15a1 1 0 0 0-.84-.99L16 11l-2.7-3.6a1 1 0 0 0-.8-.4H7.5a1 1 0 0 0-.8.4L4 11l-5.16.86A1 1 0 0 0-2 12.85V16h3"></path><circle cx="6.5" cy="16.5" r="2.5"></circle><circle cx="16.5" cy="16.5" r="2.5"></circle></svg>'''
-    
     icon_home = '''<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>'''
-    
     icon_ruler = '''<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.3 8.7l-6-6a1 1 0 0 0-1.4 0l-11 11a1 1 0 0 0 0 1.4l6 6a1 1 0 0 0 1.4 0l11-11a1 1 0 0 0 0-1.4z"></path><line x1="7.5" y1="10.5" x2="9.5" y2="8.5"></line><line x1="10.5" y1="13.5" x2="12.5" y2="11.5"></line><line x1="13.5" y1="16.5" x2="15.5" y2="14.5"></line></svg>'''
-    
     icon_lightning = '''<svg width="11" height="11" viewBox="0 0 24 24" fill="#000" stroke="#000" stroke-width="1"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>'''
     icon_shield = '''<svg width="11" height="11" viewBox="0 0 24 24" fill="#000" stroke="#000" stroke-width="1"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>'''
     icon_ruble = '''<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2.5"><path d="M6 3h7a5 5 0 0 1 5 5 5 5 0 0 1-5 5H6zm0 10h8m-8 4h5M6 3v18"></path></svg>'''
-    
     icon_tg = '''<svg width="12" height="12" viewBox="0 0 24 24" fill="#fff"><path d="M12 0C5.37 0 0 5.37 0 12s5.37 12 12 12 12-5.37 12-12S18.63 0 12 0zm5.56 8.16l-1.92 9.07c-.14.65-.53.81-1.07.51l-2.95-2.18-1.42 1.37c-.16.16-.29.29-.6.29l.21-3.01 5.48-4.95c.24-.21-.05-.33-.37-.12l-6.77 4.26-2.92-.91c-.63-.2-.64-.63.13-.93l11.4-4.39c.53-.19.99.13.83.99z"/></svg>'''
 
     flyer_single_html = f'''
         <div class="flyer-border">
 
-          <!-- 1. Шапка бренда и соседского статуса -->
+          <!-- 1. Верхняя полоса: Бренд и гео-привязка -->
           <div class="brand-bar">
-            <div class="brand-logo">
-              <div>
-                <div class="brand-title">STL GARAGE</div>
-                <div class="brand-subtitle">Мастерская 3D-печати и моделирования</div>
-              </div>
+            <div class="brand-info">
+              <span class="brand-name">STL GARAGE</span>
+              <span class="brand-dot">•</span>
+              <span class="brand-sub">МАСТЕРСКАЯ ДЕТАЛЕЙ</span>
             </div>
             <div class="neighbor-badge dynamic-badge">ВАШ СОСЕДСКИЙ МАСТЕР</div>
           </div>
 
-          <!-- 2. Главный ударный заголовок -->
-          <div class="hero-banner">
-            <span class="hero-hook">СЛОМАЛАСЬ ПЛАСТИКОВАЯ ДЕТАЛЬ?</span>
-            <span class="hero-subhook">НЕ СПЕШИТЕ ВЫБРАСЫВАТЬ ТЕХНИКУ И ВЕЩИ!</span>
+          <!-- 2. ГЛАВНЫЙ ГИГАНТСКИЙ ЗАГОЛОВОК: 3D-ПЕЧАТЬ -->
+          <div class="hero-box">
+            <div class="hero-main-title">3D-ПЕЧАТЬ</div>
+            <div class="hero-black-stripe">
+              <span>ИЗГОТОВЛЕНИЕ И РЕМОНТ ДЕТАЛЕЙ</span>
+            </div>
           </div>
 
-          <div class="hero-desc">
-            Напечатаем точную <strong>прочную копию по сломанному образцу</strong>, обломкам или фото прямо в нашем районе. Быстро, качественно и в 5-10 раз дешевле покупки нового узла!
+          <!-- 3. Понятный подзаголовок проблемы / решения -->
+          <div class="problem-hook-bar">
+            <div class="problem-lead">СЛОМАЛАСЬ ПЛАСТИКОВАЯ ДЕТАЛЬ? НЕ СПЕШИТЕ ВЫБРАСЫВАТЬ!</div>
+            <div class="problem-sub">
+              Снимем размеры и напечатаем <strong>точную прочную копию по обломкам или фото</strong> прямо в нашем районе. Быстрее и в 5-10 раз дешевле покупки новой техники!
+            </div>
           </div>
 
-          <!-- 3. Сетка услуг (2х2 карточки) -->
+          <!-- 4. Сетка услуг (2х2 карточки поломок) -->
           <div class="services-grid">
             <div class="service-card">
               <div class="card-title">
@@ -114,12 +108,12 @@ def generate_flyer():
               <ul class="card-list">
                 <li>Снимем точные размеры даже с осколков!</li>
                 <li>Индивидуальные корпуса для РЭА и датчиков</li>
-                <li>Инженерные термопласты (PETG, ABS, TPU)</li>
+                <li>Инженерный пластик (PETG, ABS, нейлон, TPU)</li>
               </ul>
             </div>
           </div>
 
-          <!-- 4. Преимущества -->
+          <!-- 5. Преимущества (3 колонки) -->
           <div class="benefits-bar">
             <div class="benefit-item">
               <div class="benefit-head">{icon_lightning} СРОЧНО ОТ 2 Ч.</div>
@@ -127,15 +121,15 @@ def generate_flyer():
             </div>
             <div class="benefit-item">
               <div class="benefit-head">{icon_shield} КРЕПЧЕ ЗАВОДА</div>
-              <div class="benefit-desc">Ударопрочный пластик</div>
+              <div class="benefit-desc">Ударопрочные термопласты</div>
             </div>
             <div class="benefit-item">
               <div class="benefit-head">{icon_ruble} ЭКОНОМИЯ ДО 90%</div>
-              <div class="benefit-desc">Дешевле новой техники</div>
+              <div class="benefit-desc">Дешевле нового узла</div>
             </div>
           </div>
 
-          <!-- 5. Блок заказа и QR-кода -->
+          <!-- 6. Блок заказа и QR-кода -->
           <div class="order-action-box">
             <div class="qr-container">
               <div class="qr-svg-wrapper">
@@ -167,14 +161,13 @@ def generate_flyer():
             </div>
           </div>
 
-          <!-- Вариант А: Отрывные корешки (6 язычков) -->
+          <!-- 7А. Отрывные корешки (для режима tabs) -->
           <div class="tear-tabs-container tabs-section">
             <div class="tear-guide">
               <span>✂ Оторвите талончик с контактами:</span>
-              <span>ПЕЧАТЬ ДЕТАЛЕЙ РЯДОМ С ВАМИ ✂</span>
+              <span>3D-ПЕЧАТЬ ДЕТАЛЕЙ РЯДОМ С ВАМИ ✂</span>
             </div>
             <div class="tabs-row">
-              <!-- 6 отрывных талонов -->
               <div class="tab-coupon">
                 <div class="tab-cut-scissors">✂</div>
                 <div class="tab-text-vertical">
@@ -243,36 +236,46 @@ def generate_flyer():
             </div>
           </div>
 
-          <!-- Вариант Б: Блок ориентировочных цен (для режима сплошной листовки) -->
+          <!-- 7Б. Полноразмерный блок с ценами (для режима prices) -->
           <div class="prices-mode-block prices-section">
             <div class="prices-title">
               <span>ОРИЕНТИРОВОЧНЫЕ ЦЕНЫ:</span>
-              <span>ОТ 150 РУБЛЕЙ</span>
+              <span class="badge-mini">ОТ 100 РУБЛЕЙ</span>
             </div>
-            <div class="prices-table">
-              <div class="price-row">
-                <span>Клипсы, пистоны, фиксаторы:</span>
-                <span class="price-val">от 100 ₽</span>
+            <div class="prices-grid-layout">
+              <div class="prices-table">
+                <div class="price-row">
+                  <span>Клипсы, пистоны, фиксаторы:</span>
+                  <span class="price-val">от 100 ₽</span>
+                </div>
+                <div class="price-row">
+                  <span>Шестерни блендеров / мясорубок:</span>
+                  <span class="price-val">от 250 ₽</span>
+                </div>
+                <div class="price-row">
+                  <span>Ручки холодильников, духовок, окон:</span>
+                  <span class="price-val">от 350 ₽</span>
+                </div>
+                <div class="price-row">
+                  <span>Защёлки, колёсики, заглушки:</span>
+                  <span class="price-val">от 150 ₽</span>
+                </div>
+                <div class="price-row">
+                  <span>Кронштейны, переходники, фланцы:</span>
+                  <span class="price-val">от 300 ₽</span>
+                </div>
+                <div class="price-row">
+                  <span>Корпуса для электроники и РЭА:</span>
+                  <span class="price-val">от 400 ₽</span>
+                </div>
               </div>
-              <div class="price-row">
-                <span>Шестерни блендеров / мясорубок:</span>
-                <span class="price-val">от 250 ₽</span>
-              </div>
-              <div class="price-row">
-                <span>Ручки холодильников, духовок, окон:</span>
-                <span class="price-val">от 350 ₽</span>
-              </div>
-              <div class="price-row">
-                <span>Защёлки, колёсики, заглушки:</span>
-                <span class="price-val">от 150 ₽</span>
-              </div>
-              <div class="price-row">
-                <span>Кронштейны, переходники, фланцы:</span>
-                <span class="price-val">от 300 ₽</span>
-              </div>
-              <div class="price-row">
-                <span>Корпуса для электроники и РЭА:</span>
-                <span class="price-val">от 400 ₽</span>
+
+              <div class="catalog-link-box">
+                <div class="catalog-qr-wrap">{qr_site_box}</div>
+                <div class="catalog-qr-desc">
+                  <strong>КАТАЛОГ ГОТОВЫХ ДЕТАЛЕЙ</strong>
+                  <span>revermag.github.io/stl-garage</span>
+                </div>
               </div>
             </div>
           </div>
@@ -387,7 +390,7 @@ def generate_flyer():
       font-weight: 800;
       color: #444;
       text-transform: uppercase;
-      letter-spacing: 0.5px;
+      letter-spacing: 1px;
     }}
 
     .input-group input, .input-group select {{
@@ -470,7 +473,7 @@ def generate_flyer():
       width: 148.5mm;
       height: 210mm;
       box-sizing: border-box;
-      padding: 5mm 6mm 4mm 6mm;
+      padding: 4.5mm 5.5mm 3.5mm 5.5mm;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
@@ -485,7 +488,7 @@ def generate_flyer():
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-      padding: 3mm 3.2mm 0mm 3.2mm;
+      padding: 2.8mm 3mm 0mm 3mm;
       position: relative;
     }}
 
@@ -494,117 +497,134 @@ def generate_flyer():
       display: flex;
       justify-content: space-between;
       align-items: center;
-      border-bottom: 2px solid #000000;
-      padding-bottom: 1.8mm;
-      margin-bottom: 1.8mm;
+      border-bottom: 1.5px solid #000000;
+      padding-bottom: 1.2mm;
+      margin-bottom: 1.2mm;
     }}
 
-    .brand-logo {{
+    .brand-info {{
       display: flex;
       align-items: center;
       gap: 5px;
     }}
 
-    .brand-title {{
-      font-size: 13.5pt;
+    .brand-name {{
+      font-size: 8pt;
       font-weight: 900;
-      letter-spacing: 0.5px;
-      text-transform: uppercase;
-      line-height: 1;
+      letter-spacing: 0.8px;
     }}
 
-    .brand-subtitle {{
-      font-size: 6.2pt;
+    .brand-dot {{
+      font-size: 8pt;
+      font-weight: 900;
+    }}
+
+    .brand-sub {{
+      font-size: 6pt;
       font-weight: 700;
-      letter-spacing: 0.4px;
-      text-transform: uppercase;
-      color: #222;
-      margin-top: 1.5px;
+      letter-spacing: 1px;
+      color: #333;
     }}
 
     .neighbor-badge {{
       background: #000000;
       color: #ffffff;
-      font-size: 6.8pt;
+      font-size: 6.2pt;
       font-weight: 800;
-      padding: 2px 6px;
-      border-radius: 3px;
+      padding: 1.8px 5px;
+      border-radius: 2px;
       text-transform: uppercase;
       letter-spacing: 0.3px;
       white-space: nowrap;
     }}
 
-    /* 2. Ударный заголовок */
-    .hero-banner {{
+    /* 2. ГИГАНТСКИЙ ЗАГОЛОВОК 3D-ПЕЧАТЬ */
+    .hero-box {{
+      border: 2.5px solid #000000;
+      border-radius: 4px;
+      text-align: center;
+      margin-bottom: 1.5mm;
+      background: #ffffff;
+      overflow: hidden;
+    }}
+
+    .hero-main-title {{
+      font-size: 28pt;
+      font-weight: 950;
+      line-height: 1.05;
+      letter-spacing: 2px;
+      color: #000000;
+      padding: 1.2mm 2mm 0.8mm 2mm;
+      text-transform: uppercase;
+    }}
+
+    .hero-black-stripe {{
       background: #000000;
       color: #ffffff;
-      padding: 2.8mm 3mm 2.4mm 3mm;
-      text-align: center;
-      border-radius: 4px;
-      margin-bottom: 1.8mm;
-      border: 1px solid #000000;
+      font-size: 9pt;
+      font-weight: 900;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      padding: 1.2mm 2mm;
+      line-height: 1.1;
     }}
 
-    .hero-banner .hero-hook {{
-      font-size: 11.2pt;
+    /* 3. Проблема / Решение */
+    .problem-hook-bar {{
+      text-align: center;
+      margin-bottom: 1.6mm;
+      padding: 0 1mm;
+    }}
+
+    .problem-lead {{
+      font-size: 7.8pt;
       font-weight: 900;
       text-transform: uppercase;
+      color: #000;
       letter-spacing: 0.2px;
       line-height: 1.15;
-      display: block;
     }}
 
-    .hero-banner .hero-subhook {{
-      font-size: 8.2pt;
-      font-weight: 800;
-      letter-spacing: 0.2px;
-      color: #ffffff;
-      margin-top: 2px;
-      display: block;
-    }}
-
-    .hero-desc {{
-      font-size: 7pt;
+    .problem-sub {{
+      font-size: 6.5pt;
       font-weight: 600;
       line-height: 1.25;
-      text-align: center;
-      margin: 1.2mm 0 1.8mm 0;
-      padding: 0 1mm;
-      color: #000;
+      color: #222;
+      margin-top: 1px;
     }}
 
-    .hero-desc strong {{
+    .problem-sub strong {{
       font-weight: 900;
       text-decoration: underline;
     }}
 
-    /* 3. Сетка услуг (2х2) */
+    /* 4. Сетка услуг (2х2) */
     .services-grid {{
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 1.8mm;
-      margin-bottom: 1.8mm;
+      gap: 1.6mm;
+      margin-bottom: 1.6mm;
     }}
 
     .service-card {{
       border: 1.5px solid #000000;
       border-radius: 3px;
-      padding: 1.8mm 2.2mm;
+      padding: 1.6mm 2mm;
       background: #ffffff;
       display: flex;
       flex-direction: column;
     }}
 
     .card-title {{
-      font-size: 7pt;
+      font-size: 6.8pt;
       font-weight: 900;
       text-transform: uppercase;
       display: flex;
       align-items: center;
-      gap: 4px;
+      gap: 3.5px;
       border-bottom: 1px solid #000000;
-      padding-bottom: 1mm;
-      margin-bottom: 1mm;
+      padding-bottom: 0.8mm;
+      margin-bottom: 0.8mm;
       line-height: 1.1;
     }}
 
@@ -621,32 +641,32 @@ def generate_flyer():
     }}
 
     .card-list li {{
-      font-size: 6.2pt;
-      line-height: 1.25;
+      font-size: 6pt;
+      line-height: 1.2;
       color: #000;
-      margin-bottom: 1.5px;
+      margin-bottom: 1.2px;
       display: flex;
       align-items: flex-start;
-      gap: 3px;
+      gap: 2.5px;
     }}
 
     .card-list li::before {{
       content: "▪";
       font-size: 6.5pt;
       color: #000;
-      line-height: 1.2;
+      line-height: 1.1;
     }}
 
-    /* 4. Преимущества */
+    /* 5. Преимущества */
     .benefits-bar {{
       display: flex;
       justify-content: space-between;
       background: #ffffff;
       border: 1.5px solid #000000;
       border-radius: 3px;
-      padding: 1.6mm 2mm;
-      margin-bottom: 1.8mm;
-      gap: 1.5mm;
+      padding: 1.4mm 1.8mm;
+      margin-bottom: 1.6mm;
+      gap: 1.2mm;
     }}
 
     .benefit-item {{
@@ -663,7 +683,7 @@ def generate_flyer():
     }}
 
     .benefit-head {{
-      font-size: 6.6pt;
+      font-size: 6.4pt;
       font-weight: 900;
       text-transform: uppercase;
       line-height: 1.1;
@@ -673,40 +693,40 @@ def generate_flyer():
     }}
 
     .benefit-desc {{
-      font-size: 5.5pt;
+      font-size: 5.4pt;
       font-weight: 700;
       color: #222;
       margin-top: 1px;
     }}
 
-    /* 5. Блок заказа и QR-кода */
+    /* 6. Блок заказа и QR-кода */
     .order-action-box {{
       border: 2px solid #000000;
       border-radius: 4px;
-      padding: 2mm 2.2mm;
+      padding: 1.8mm 2mm;
       display: flex;
-      gap: 2.2mm;
+      gap: 2mm;
       align-items: center;
-      margin-bottom: 1.8mm;
+      margin-bottom: 1.6mm;
       background: #ffffff;
     }}
 
     .qr-container {{
       flex-shrink: 0;
-      width: 25mm;
-      height: 25mm;
+      width: 24mm;
+      height: 24mm;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
       border: 1.5px solid #000000;
-      padding: 1mm;
+      padding: 0.8mm;
       background: #ffffff;
     }}
 
     .qr-svg-wrapper {{
-      width: 20mm;
-      height: 20mm;
+      width: 19mm;
+      height: 19mm;
     }}
 
     .qr-svg-wrapper svg {{
@@ -716,7 +736,7 @@ def generate_flyer():
     }}
 
     .qr-caption {{
-      font-size: 5pt;
+      font-size: 4.8pt;
       font-weight: 900;
       text-transform: uppercase;
       margin-top: 1px;
@@ -733,25 +753,25 @@ def generate_flyer():
     }}
 
     .order-steps-title {{
-      font-size: 7.2pt;
+      font-size: 7pt;
       font-weight: 900;
       text-transform: uppercase;
       letter-spacing: 0.3px;
-      margin-bottom: 1.2mm;
+      margin-bottom: 1mm;
       display: flex;
       align-items: center;
       gap: 4px;
     }}
 
     .steps-list {{
-      font-size: 6.2pt;
-      line-height: 1.25;
+      font-size: 6pt;
+      line-height: 1.2;
       font-weight: 600;
-      margin-bottom: 1.6mm;
+      margin-bottom: 1.4mm;
     }}
 
     .steps-list div {{
-      margin-bottom: 1.5px;
+      margin-bottom: 1.2px;
     }}
 
     .steps-list strong {{
@@ -761,15 +781,15 @@ def generate_flyer():
     .contact-highlight {{
       background: #000000;
       color: #ffffff;
-      padding: 1.6mm 2mm;
+      padding: 1.4mm 1.8mm;
       border-radius: 3px;
       display: flex;
       flex-direction: column;
-      gap: 1.5px;
+      gap: 1.2px;
     }}
 
     .contact-row {{
-      font-size: 7pt;
+      font-size: 6.8pt;
       font-weight: 800;
       display: flex;
       align-items: center;
@@ -777,27 +797,27 @@ def generate_flyer():
     }}
 
     .contact-label {{
-      font-size: 6pt;
+      font-size: 5.8pt;
       letter-spacing: 0.3px;
     }}
 
     .contact-phone {{
-      font-size: 8.8pt;
+      font-size: 8.6pt;
       font-weight: 900;
       letter-spacing: 0.3px;
     }}
 
     .contact-tg {{
-      font-size: 7.5pt;
+      font-size: 7.2pt;
       font-weight: 900;
       color: #ffffff;
     }}
 
-    /* 6. Отрывные корешки (Tear-off coupons) */
+    /* 7. Отрывные корешки (Tear-off coupons) */
     .tear-tabs-container {{
       border-top: 1.5px dashed #000000;
-      margin-top: 1mm;
-      padding-top: 1.2mm;
+      margin-top: 0.8mm;
+      padding-top: 1mm;
       display: flex;
       flex-direction: column;
       position: relative;
@@ -807,11 +827,11 @@ def generate_flyer():
       display: flex;
       align-items: center;
       justify-content: space-between;
-      font-size: 5.5pt;
+      font-size: 5.4pt;
       font-weight: 900;
       text-transform: uppercase;
-      letter-spacing: 0.5px;
-      margin-bottom: 1mm;
+      letter-spacing: 0.4px;
+      margin-bottom: 0.8mm;
     }}
 
     .tabs-row {{
@@ -827,7 +847,7 @@ def generate_flyer():
       flex-direction: column;
       align-items: center;
       justify-content: space-between;
-      padding: 1.5mm 0.8mm;
+      padding: 1.2mm 0.8mm;
       box-sizing: border-box;
       position: relative;
       text-align: center;
@@ -841,7 +861,7 @@ def generate_flyer():
       font-size: 6pt;
       line-height: 1;
       color: #000;
-      margin-bottom: 1mm;
+      margin-bottom: 0.8mm;
     }}
 
     .tab-text-vertical {{
@@ -857,10 +877,10 @@ def generate_flyer():
     }}
 
     .tab-title {{
-      font-size: 6.8pt;
-      font-weight: 900;
+      font-size: 7pt;
+      font-weight: 950;
       text-transform: uppercase;
-      letter-spacing: 0.3px;
+      letter-spacing: 0.4px;
     }}
 
     .tab-service {{
@@ -886,9 +906,9 @@ def generate_flyer():
     }}
 
     .tab-mini-qr {{
-      width: 7.5mm;
-      height: 7.5mm;
-      margin-top: 1mm;
+      width: 7.2mm;
+      height: 7.2mm;
+      margin-top: 0.8mm;
       flex-shrink: 0;
     }}
 
@@ -898,32 +918,48 @@ def generate_flyer():
       display: block;
     }}
 
-    /* Альтернативный режим цен */
+    /* Режим сплошной листовки */
     .prices-mode-block {{
       display: none;
       border: 1.5px solid #000000;
       border-radius: 3px;
-      padding: 2mm 2.5mm;
-      margin-top: 1mm;
+      padding: 1.8mm 2.2mm;
+      margin-top: 0.8mm;
       background: #ffffff;
     }}
 
     .prices-title {{
-      font-size: 7.2pt;
+      font-size: 7pt;
       font-weight: 900;
       text-transform: uppercase;
-      border-bottom: 1px solid #000;
-      padding-bottom: 1mm;
-      margin-bottom: 1.5mm;
+      border-bottom: 1.5px solid #000;
+      padding-bottom: 0.8mm;
+      margin-bottom: 1.2mm;
       display: flex;
       justify-content: space-between;
+      align-items: center;
+    }}
+
+    .badge-mini {{
+      background: #000;
+      color: #fff;
+      font-size: 5.8pt;
+      padding: 1.2px 4px;
+      border-radius: 2px;
+    }}
+
+    .prices-grid-layout {{
+      display: flex;
+      gap: 2mm;
+      align-items: center;
     }}
 
     .prices-table {{
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 1.5mm;
-      font-size: 6.2pt;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 1.2px;
+      font-size: 6pt;
     }}
 
     .price-row {{
@@ -935,6 +971,54 @@ def generate_flyer():
 
     .price-val {{
       font-weight: 900;
+    }}
+
+    .catalog-link-box {{
+      width: 28mm;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      border-left: 1px solid #000;
+      padding-left: 2mm;
+    }}
+
+    .catalog-qr-wrap {{
+      width: 17mm;
+      height: 17mm;
+    }}
+
+    .catalog-qr-wrap svg {{
+      width: 100%;
+      height: 100%;
+      display: block;
+    }}
+
+    .catalog-qr-desc {{
+      margin-top: 1px;
+      font-size: 4.6pt;
+      line-height: 1.1;
+      text-transform: uppercase;
+    }}
+
+    .catalog-qr-desc strong {{
+      display: block;
+      font-size: 5pt;
+    }}
+
+    /* Переключение классов через body */
+    body.mode-tabs .tabs-section {{
+      display: flex !important;
+    }}
+    body.mode-tabs .prices-section {{
+      display: none !important;
+    }}
+
+    body.mode-prices .tabs-section {{
+      display: none !important;
+    }}
+    body.mode-prices .prices-section {{
+      display: block !important;
     }}
 
     @page {{
@@ -974,7 +1058,7 @@ def generate_flyer():
     }}
   </style>
 </head>
-<body>
+<body class="mode-tabs">
 
   <!-- ВЕРХНЯЯ ПАНЕЛЬ УПРАВЛЕНИЯ -->
   <div class="control-panel">
@@ -1015,7 +1099,7 @@ def generate_flyer():
     </div>
 
     <div class="panel-hint">
-      <strong>Рекомендации для печати:</strong> В диалоге печати выберите <strong>Альбомная (Landscape)</strong>, масштаб <strong>100%</strong> (или «Подогнать по размеру страницы»), поля — <strong>Минимальные</strong> или <strong>Отсутствуют</strong>. Включите галочку <em>«Печать фоновых изображений»</em>. После печати разрежьте лист по пунктирной линии ✂ пополам.
+      <strong>Рекомендации для печати:</strong> В диалоге печати выберите <strong>Альбомная (Landscape)</strong>, масштаб <strong>100%</strong> (или «Подогнать по размеру страницы»), поля — <strong>Минимальные</strong> или <strong>Отсутствуют</strong>. Включите галочку <em>«Печать фоновых изображений»</em>. После печати разрежьте лист по пунктирной линии ✂ пополам на 2 готовых флаера А5.
     </div>
   </div>
 
@@ -1055,15 +1139,12 @@ def generate_flyer():
 
     function toggleMode() {{
       const mode = document.getElementById('selectMode').value;
-      const tabsSections = document.querySelectorAll('.tabs-section');
-      const pricesSections = document.querySelectorAll('.prices-section');
-
       if (mode === 'prices') {{
-        tabsSections.forEach(el => el.style.display = 'none');
-        pricesSections.forEach(el => el.style.display = 'block');
+        document.body.classList.remove('mode-tabs');
+        document.body.classList.add('mode-prices');
       }} else {{
-        tabsSections.forEach(el => el.style.display = 'flex');
-        pricesSections.forEach(el => el.style.display = 'none');
+        document.body.classList.remove('mode-prices');
+        document.body.classList.add('mode-tabs');
       }}
     }}
   </script>
@@ -1075,21 +1156,27 @@ def generate_flyer():
         f.write(html_content)
     print("Updated flyer.html written successfully.")
 
-    # Рендерим свежий PDF и превью через Edge
     edge_path = r'C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe'
     html_path = os.path.abspath('flyer.html')
     pdf_out = os.path.abspath('flyer_2x_a4.pdf')
     preview_out = os.path.abspath('assets/flyer_preview_large.png')
 
-    # 1. PDF export
+    # PDF export
     cmd_pdf = [edge_path, '--headless', '--disable-gpu', f'--print-to-pdf={pdf_out}', '--no-pdf-header-footer', f'file:///{html_path}']
     subprocess.run(cmd_pdf, capture_output=True)
 
-    # 2. Screenshot export
+    # Screenshot export
     cmd_img = [edge_path, '--headless', '--disable-gpu', '--window-size=1754,1240', f'--screenshot={preview_out}', f'file:///{html_path}']
     subprocess.run(cmd_img, capture_output=True)
 
-    print("Rendered flyer_2x_a4.pdf and assets/flyer_preview_large.png")
+    # Crop previews
+    im = Image.open(preview_out)
+    sheet = im.crop((307, 210, 1446, 1101))
+    sheet.save('assets/flyer_preview_sheet.png')
+    single = sheet.crop((0, 0, sheet.width // 2, sheet.height))
+    single.save('assets/flyer_preview_single.png')
+
+    print("Rendered updated flyer_2x_a4.pdf and previews successfully.")
 
 if __name__ == '__main__':
     generate_flyer()
