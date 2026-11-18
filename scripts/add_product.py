@@ -31,7 +31,17 @@ def save_products(products):
     PRODUCTS_FILE.parent.mkdir(parents=True, exist_ok=True)
     with open(PRODUCTS_FILE, "w", encoding="utf-8") as f:
         json.dump(products, f, ensure_ascii=False, indent=2)
-    print(f"[OK] Каталог успешно обновлен: {len(products)} товаров в {PRODUCTS_FILE}")
+    print(f"[OK] Каталог локально обновлен: {len(products)} товаров в {PRODUCTS_FILE}")
+
+    # Auto sync with GitHub Pages
+    try:
+        import subprocess
+        subprocess.run(["git", "add", "data/products.json"], cwd=str(BASE_DIR), check=True)
+        subprocess.run(["git", "commit", "-m", "chore: update products catalog"], cwd=str(BASE_DIR), check=True)
+        subprocess.run(["git", "push", "origin", "main"], cwd=str(BASE_DIR), check=True)
+        print("[OK] Изменения автоматически отправлены на сайт (GitHub Pages)!")
+    except Exception as e:
+        print(f"[WARN] Ошибка авто-синхронизации с GitHub: {e}")
 
 
 def add_product(item: dict, publish_to_telegram: bool = False):
