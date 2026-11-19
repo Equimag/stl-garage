@@ -494,18 +494,20 @@ def build_tpu_vibration_dampers(kompas5):
 
 
 def build_cable_drop_clips(kompas5):
-    """Модель 7: Гибкая клипса-органайзер TPU с упругим замком."""
+    """Модель 7: Гибкая клипса-органайзер TPU с упругим замком и кабель-каналом."""
     print("[7/8] Моделирование: Кабель-органайзер TPU...", flush=True)
     doc3d = kompas5.Document3D()
     doc3d.Create(False, True)
     part = doc3d.GetPart(-1)
-    planeXOY = part.GetDefaultEntity(1)
+    planeXOY = part.GetDefaultEntity(1) # Основание Z=0
+    planeXOZ = part.GetDefaultEntity(2) # Фронт Y=0
 
+    # 1. Скругленный корпус клипсы 28 x 16 x 14 мм
     sk_b = part.NewEntity(o3d_sketch)
     sk_b.GetDefinition().SetPlane(planeXOY)
     sk_b.Create()
     d2d = sk_b.GetDefinition().BeginEdit()
-    draw_rounded_rect(d2d, -14.0, -8.0, 14.0, 8.0, 3.0)
+    draw_rounded_rect(d2d, -14.0, -8.0, 14.0, 8.0, 3.5)
     sk_b.GetDefinition().EndEdit()
 
     boss = part.NewEntity(o3d_bossExtrusion)
@@ -514,20 +516,38 @@ def build_cable_drop_clips(kompas5):
     boss.GetDefinition().SetSideParam(True, ks_end_blind, 14.0, 0.0, False)
     boss.Create()
 
-    # Кабель-канал Ø6.5 мм и защелка
+    # 2. Сквозной кабель-канал Ø6.6 мм вдоль оси Y (через planeXOZ)
+    sk_tun = part.NewEntity(o3d_sketch)
+    sk_tun.GetDefinition().SetPlane(planeXOZ)
+    sk_tun.Create()
+    d2d = sk_tun.GetDefinition().BeginEdit()
+    d2d.ksCircle(0.0, 6.5, 3.3, 1) # центр на высоте Z=6.5 мм, R=3.3 мм
+    sk_tun.GetDefinition().EndEdit()
+
+    cut1 = part.NewEntity(o3d_cutExtrusion)
+    cut1.GetDefinition().SetSketch(sk_tun)
+    cut1.GetDefinition().directionType = dtNormal
+    cut1.GetDefinition().SetSideParam(True, ks_end_blind, 20.0, 0.0, False)
+    cut1.Create()
+
+    # 3. Верхний эластичный замок: паз 2.4 мм с заходами под углом
     sk_slot = part.NewEntity(o3d_sketch)
-    sk_slot.GetDefinition().SetPlane(planeXOY)
+    sk_slot.GetDefinition().SetPlane(planeXOZ)
     sk_slot.Create()
     d2d = sk_slot.GetDefinition().BeginEdit()
-    d2d.ksCircle(0.0, 0.0, 3.3, 1) # Канал Ø6.6 мм
-    draw_rounded_rect(d2d, -1.2, 0.0, 1.2, 8.5, 0.4) # Замок
+    d2d.ksLineSeg(-1.2, 6.5, 1.2, 6.5, 1)
+    d2d.ksLineSeg(1.2, 6.5, 1.2, 12.0, 1)
+    d2d.ksLineSeg(1.2, 12.0, 2.5, 14.5, 1) # правая фаска захода
+    d2d.ksLineSeg(2.5, 14.5, -2.5, 14.5, 1)
+    d2d.ksLineSeg(-2.5, 14.5, -1.2, 12.0, 1) # левая фаска захода
+    d2d.ksLineSeg(-1.2, 12.0, -1.2, 6.5, 1)
     sk_slot.GetDefinition().EndEdit()
 
-    cut = part.NewEntity(o3d_cutExtrusion)
-    cut.GetDefinition().SetSketch(sk_slot)
-    cut.GetDefinition().directionType = dtNormal
-    cut.GetDefinition().SetSideParam(True, ks_end_blind, 14.0, 0.0, False)
-    cut.Create()
+    cut2 = part.NewEntity(o3d_cutExtrusion)
+    cut2.GetDefinition().SetSketch(sk_slot)
+    cut2.GetDefinition().directionType = dtNormal
+    cut2.GetDefinition().SetSideParam(True, ks_end_blind, 20.0, 0.0, False)
+    cut2.Create()
 
     doc3d.SaveAs(str(MODELS_DIR / "cable_drop_clips.m3d"))
     doc3d.SaveAs(str(MODELS_DIR / "cable_drop_clips.step"))
