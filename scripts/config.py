@@ -29,7 +29,7 @@ CHANNEL_URL = "https://t.me/stl_garage"
 BOOSTY_URL = "https://boosty.to/stl_garage/donate"
 
 # Base site URL on GitHub Pages
-SITE_URL = "https://revermag.github.io/stl-garage/"
+SITE_URL = "https://equimag.github.io/stl-garage/"
 
 # Google Gemini API Configuration
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY", "")

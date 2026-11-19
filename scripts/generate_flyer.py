@@ -22,7 +22,7 @@ def get_qr_svg(url, box_size=8):
 def generate_flyer():
     qr_tg_main = get_qr_svg('https://t.me/stl_garage', box_size=7)
     qr_tg_mini = get_qr_svg('https://t.me/stl_garage', box_size=3)
-    qr_site_box = get_qr_svg('https://revermag.github.io/stl-garage/', box_size=5)
+    qr_site_box = get_qr_svg('https://equimag.github.io/stl-garage/', box_size=5)
 
     icon_gear = '''<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>'''
     icon_car = '''<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 16H9m10 0h3v-3.15a1 1 0 0 0-.84-.99L16 11l-2.7-3.6a1 1 0 0 0-.8-.4H7.5a1 1 0 0 0-.8.4L4 11l-5.16.86A1 1 0 0 0-2 12.85V16h3"></path><circle cx="6.5" cy="16.5" r="2.5"></circle><circle cx="16.5" cy="16.5" r="2.5"></circle></svg>'''
@@ -274,7 +274,7 @@ def generate_flyer():
                 <div class="catalog-qr-wrap">{qr_site_box}</div>
                 <div class="catalog-qr-desc">
                   <strong>КАТАЛОГ ГОТОВЫХ ДЕТАЛЕЙ</strong>
-                  <span>revermag.github.io/stl-garage</span>
+                  <span>equimag.github.io/stl-garage</span>
                 </div>
               </div>
             </div>
