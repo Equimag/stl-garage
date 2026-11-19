@@ -14,9 +14,9 @@ from pathlib import Path
 
 # Load config
 try:
-    from config import BOT_TOKEN, CHANNEL_ID, CHANNEL_USERNAME, BOT_USERNAME, SITE_URL
+    from config import BOT_TOKEN, CHANNEL_ID, CHANNEL_USERNAME, BOT_USERNAME, SITE_URL, MASTER_USERNAME
 except ImportError:
-    from scripts.config import BOT_TOKEN, CHANNEL_ID, CHANNEL_USERNAME, BOT_USERNAME, SITE_URL
+    from scripts.config import BOT_TOKEN, CHANNEL_ID, CHANNEL_USERNAME, BOT_USERNAME, SITE_URL, MASTER_USERNAME
 
 
 def send_api_request(method: str, payload: dict) -> dict:
@@ -161,7 +161,7 @@ def publish_product_card(product: dict, photo_path: str = None, webapp_url: str 
     buttons = [
         [
             {"text": "🛒 Открыть в каталоге", "url": target_url},
-            {"text": "💬 Заказать у мастера", "url": f"https://t.me/{BOT_USERNAME}"}
+            {"text": "💬 Заказать у мастера (@voovkamo)", "url": f"https://t.me/{MASTER_USERNAME}"}
         ]
     ]
 

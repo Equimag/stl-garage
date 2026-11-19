@@ -23,6 +23,7 @@ for env_candidate in [
 
 BOT_TOKEN = os.getenv("BOT_TOKEN", "")
 BOT_USERNAME = "STLGarage_bot"
+MASTER_USERNAME = "voovkamo"
 CHANNEL_ID = int(os.getenv("CHANNEL_ID", "-1002753288392"))
 CHANNEL_USERNAME = "stl_garage"
 CHANNEL_URL = "https://t.me/stl_garage"

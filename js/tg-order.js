@@ -1,6 +1,7 @@
 // TELEGRAM INTEGRATION & ORDER DISPATCH
 const TG_CONFIG = {
   botUsername: 'STLGarage_bot',
+  masterUsername: 'voovkamo',
   botToken: '7860903769:AAFIQQr8Mx8Ld5Sb5saiZ0nhfqR7B7txgkc',
   channelUsername: 'stl_garage',
   channelUrl: 'https://t.me/stl_garage',
@@ -72,7 +73,8 @@ const TelegramService = {
     }
 
     // Option 3: Fallback / 1-tap direct Telegram chat redirection with prefilled order
-    const directUrl = `https://t.me/${TG_CONFIG.botUsername}?text=${encodeURIComponent(message)}`;
+    const targetUser = TG_CONFIG.masterUsername || TG_CONFIG.botUsername;
+    const directUrl = `https://t.me/${targetUser}?text=${encodeURIComponent(message)}`;
     
     return {
       success: true,
