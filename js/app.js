@@ -664,6 +664,12 @@ document.addEventListener('DOMContentLoaded', () => {
   window.Calculator?.init();
   setupFilters();
   setupThemes();
+  
+  // Instant render: zero latency, immediate visual catalog
+  AppState.products = FALLBACK_PRODUCTS;
+  renderProducts();
+
+  // Background fetch to sync any dynamic catalog updates
   loadProducts();
 });
 
