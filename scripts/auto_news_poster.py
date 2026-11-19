@@ -16,8 +16,14 @@ import urllib.error
 import xml.etree.ElementTree as ET
 from pathlib import Path
 
-# Load project config & publisher
-ROOT_DIR = Path(__file__).resolve().parent.parent
+# Determine project root directory whether running from scripts/ or root
+current_dir = Path(__file__).resolve().parent
+if current_dir.name == "scripts":
+    ROOT_DIR = current_dir.parent
+else:
+    ROOT_DIR = current_dir
+
+sys.path.insert(0, str(ROOT_DIR))
 sys.path.insert(0, str(ROOT_DIR / "scripts"))
 
 try:

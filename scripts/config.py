@@ -3,17 +3,23 @@ import os
 from pathlib import Path
 
 # Load local .env if present (git-ignored for security)
-env_path = Path(__file__).resolve().parent.parent / ".env"
-if env_path.exists():
-    try:
-        with open(env_path, "r", encoding="utf-8") as f:
-            for line in f:
-                line = line.strip()
-                if line and not line.startswith("#") and "=" in line:
-                    k, v = line.split("=", 1)
-                    os.environ.setdefault(k.strip(), v.strip())
-    except Exception:
-        pass
+# Checks both current directory and parent directory
+for env_candidate in [
+    Path(__file__).resolve().parent / ".env",
+    Path(__file__).resolve().parent.parent / ".env",
+    Path("/opt/stl-news-poster/.env")
+]:
+    if env_candidate.exists():
+        try:
+            with open(env_candidate, "r", encoding="utf-8") as f:
+                for line in f:
+                    line = line.strip()
+                    if line and not line.startswith("#") and "=" in line:
+                        k, v = line.split("=", 1)
+                        os.environ.setdefault(k.strip(), v.strip())
+            break
+        except Exception:
+            pass
 
 BOT_TOKEN = os.getenv("BOT_TOKEN", "")
 BOT_USERNAME = "STLGarage_bot"
