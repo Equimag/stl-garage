@@ -1,4 +1,5 @@
 // STL GARAGE — MAIN APPLICATION LOGIC
+const CACHE_BUST_VERSION = '20261119_v1';
 
 // Embedded fallback products catalog for local file:// previews
 const FALLBACK_PRODUCTS = [
@@ -541,8 +542,9 @@ function renderProducts() {
     const accentColor = p.image_color || 'var(--color-primary)';
     
     // Visual: image or SVG blueprint
+    const imgUrl = p.image ? `${p.image}?v=${CACHE_BUST_VERSION}` : '';
     const visualHtml = p.image 
-      ? `<img src="${p.image}" alt="${p.title}" class="product-img" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+      ? `<img src="${imgUrl}" alt="${p.title}" class="product-img" loading="eager" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
          <div class="product-visual" style="display:none;">
             <svg class="blueprint-svg" viewBox="0 0 160 120" fill="none" stroke="${accentColor}" stroke-width="1.5">
               <rect x="25" y="25" width="110" height="70" rx="8" stroke-dasharray="2 2" stroke-opacity="0.4"/>
@@ -640,7 +642,7 @@ function setupThemes() {
 // Load Catalog
 async function loadProducts() {
   try {
-    const res = await fetch('data/products.json');
+    const res = await fetch(`data/products.json?v=${CACHE_BUST_VERSION}`);
     if (res.ok) {
       AppState.products = await res.json();
     } else {
