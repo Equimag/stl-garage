@@ -27,10 +27,10 @@ sys.path.insert(0, str(ROOT_DIR))
 sys.path.insert(0, str(ROOT_DIR / "scripts"))
 
 try:
-    from config import BOT_TOKEN, CHANNEL_ID, CHANNEL_USERNAME, BOT_USERNAME, SITE_URL, GEMINI_API_KEY
+    from config import BOT_TOKEN, CHANNEL_ID, CHANNEL_USERNAME, BOT_USERNAME, SITE_URL, GEMINI_API_KEY, MASTER_USERNAME
     from channel_publisher import send_photo, publish_post
 except ImportError:
-    from scripts.config import BOT_TOKEN, CHANNEL_ID, CHANNEL_USERNAME, BOT_USERNAME, SITE_URL, GEMINI_API_KEY
+    from scripts.config import BOT_TOKEN, CHANNEL_ID, CHANNEL_USERNAME, BOT_USERNAME, SITE_URL, GEMINI_API_KEY, MASTER_USERNAME
     from scripts.channel_publisher import send_photo, publish_post
 
 HISTORY_FILE = ROOT_DIR / "data" / "published_news.json"
@@ -320,9 +320,10 @@ def publish_one_news(dry_run: bool = False) -> bool:
         return True
 
     # Кнопки под постом
+    order_url = f"https://t.me/{MASTER_USERNAME}" if MASTER_USERNAME else f"https://t.me/{BOT_USERNAME}"
     buttons = [
         [
-            {"text": "💬 Заказать печать / Чат", "url": f"https://t.me/{BOT_USERNAME}"},
+            {"text": f"💬 Заказать у мастера (@{MASTER_USERNAME})", "url": order_url},
             {"text": "🌐 Каталог STL GARAGE", "url": SITE_URL}
         ]
     ]
